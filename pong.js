@@ -266,6 +266,7 @@ $(function () {
       canvas.fillStyle = 'white';
       canvas.font = "48px courier";
       
+      // draw title
       var winText = 'PONG',
           winTextWidth = canvas.measureText(winText).width,
           winTextHeight = getTextHeight(canvas.font).height;
@@ -276,6 +277,7 @@ $(function () {
         CANVAS_HEIGHT / 2 - winTextHeight / 2
       );
       
+      // draw start game message
       canvas.font = "18px courier";
       var newGameText = 'Press SPACE to serve the ball',
           newGameTextWidth = canvas.measureText(newGameText).width,
@@ -287,6 +289,7 @@ $(function () {
         CANVAS_HEIGHT / 2 + winTextHeight + 20
       );
       
+      // draw controls message
       canvas.font = "12px courier";
       var playerOneControlsText = 'Player 1 Controls - w: paddle up, s: paddle down',
           playerOneControlsTextWidth = canvas.measureText(playerOneControlsText).width,
@@ -331,6 +334,7 @@ $(function () {
       canvas.fillStyle = 'white';
       canvas.font = "48px courier";
       
+      // draw winning player message
       var winText = 'Player ' + (state.left.score === 5 ? '1' : '2') + ' wins',
           winTextWidth = canvas.measureText(winText).width,
           winTextHeight = getTextHeight(canvas.font).height;
@@ -341,6 +345,7 @@ $(function () {
         CANVAS_HEIGHT / 2 - winTextHeight / 2
       );
       
+      // draw new game message 
       canvas.font = "18px courier";
       var newGameText = 'Press SPACE to start a new game',
           newGameTextWidth = canvas.measureText(newGameText).width;
@@ -394,7 +399,7 @@ $(function () {
       // end turn
       state.status = STATUS.SERVING;
             
-      // increase score
+      // increase score for the player who scored the goal
       if (ballBoundaries.right > FIELD.RIGHT) {
         state.left.score++;
         resetBall(1);
@@ -414,6 +419,7 @@ $(function () {
     downKeyCode,
     upKeyCode
   ) {
+    // determine if the ball is colliding with the paddle
     if (
       leftBoundary <= rightBoundary
       && (
@@ -427,28 +433,14 @@ $(function () {
         )
       )
     ) {
-      if (activeKeyCode) {
-        // paddle is moving
+      // if the paddle is moving
+      if (activeKeyCode) { 
         if (activeKeyCode == downKeyCode) {
-          if (state.ball.vector.y > 0) {
-            // paddle moving in same direction as ball
-            // increase velocity
-            state.ball.vector.velocity = Math.min(MAX_BALL_VELOCITY, state.ball.vector.velocity + VELOCITY_STEP);
-          } else {
-            // paddle moving in opposite direction as ball            
-            // decrease velocity
-            state.ball.vector.velocity = Math.max(MIN_BALL_VELOCITY, state.ball.vector.velocity - VELOCITY_STEP);
-          }
-        } else if (activeKeyCode == upKeyCode) {          
-          if (state.ball.vector.y < 0) {
-            // paddle moving in same direction as ball            
-            // increase velocity
-            state.ball.vector.velocity = Math.min(MAX_BALL_VELOCITY, state.ball.vector.velocity + VELOCITY_STEP);
-          } else {
-            // paddle moving in same direction as ball            
-            // decrease velocity
-            state.ball.vector.velocity = Math.max(MIN_BALL_VELOCITY, state.ball.vector.velocity - VELOCITY_STEP);
-          }  
+          // pass true to increase velocity if paddle and ball moving in same direction. 
+          setVelocity(state.ball.vector.y > 0);
+        } else if (activeKeyCode == upKeyCode) {
+          // pass true to increase velocity if paddle and ball moving in same direction. 
+          setVelocity(state.ball.vector.y < 0);  
         }
       }
       
@@ -458,6 +450,7 @@ $(function () {
   }
   
   function getBoundaries (point, width, height) {
+    // get the boundaries of a rectangular body
     return {
       top: point.y,
       bottom: point.y + height,
@@ -477,6 +470,12 @@ $(function () {
   function resetBall (x) {
     state.ball = clone(DEFAULT_BALL_SETTINGS);
     state.ball.vector.x = x;
+  }
+  
+  function setVelocity (increaseVelocity) {
+    state.ball.vector.velocity = (increaseVelocity)
+      ? Math.min(MAX_BALL_VELOCITY, state.ball.vector.velocity + VELOCITY_STEP)
+      : Math.max(MIN_BALL_VELOCITY, state.ball.vector.velocity - VELOCITY_STEP);
   }
   
   function clone (o) {

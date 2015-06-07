@@ -1,0 +1,17 @@
+body {
+  background: #2D9CE0;
+}
+
+#game {
+  position: absolute;
+  height: 450px;
+  width: 600px;
+  margin: -225px 0 0 -300px;
+  top: 50%;
+  left: 50%;
+  background: #000;
+}
+
+canvas {
+  background: #000;
+}

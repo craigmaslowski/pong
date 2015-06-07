@@ -177,7 +177,7 @@ $(function () {
     drawScore();
     drawNewGameMessage();
     drawServeMessage();
-    drawWinner();
+    drawWinnerMessage();
   }
   
   function drawBoundaries () {
@@ -326,7 +326,7 @@ $(function () {
     }
   }
   
-  function drawWinner() {
+  function drawWinnerMessage() {
     if (state.status === STATUS.GAME_OVER) {
       canvas.fillStyle = 'white';
       canvas.font = "48px courier";
